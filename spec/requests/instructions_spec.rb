@@ -21,6 +21,7 @@ RSpec.describe "Instructions", type: :request do
     end
 
     context 'when recipe does not exist' do
+      let(:recipe_id) {0}
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
@@ -32,6 +33,7 @@ RSpec.describe "Instructions", type: :request do
   end
 
   describe 'GET recipes/:recipe_id/instructions/:id' do
+    before { get "/recipes/#{recipe_id}/instructions/#{id}" }
     context 'when recipe instruction exists' do
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -43,6 +45,7 @@ RSpec.describe "Instructions", type: :request do
     end
 
     context 'when recipe instruction does not exist' do
+      let(:id) {0}
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
@@ -57,7 +60,7 @@ RSpec.describe "Instructions", type: :request do
     let(:valid_attributes) {{step: 'add sugar'}}
     
     context 'when request attributes are valid' do
-      before {post "/recipes/#{:recipe_id}/instructions", params: valid_attributes}
+      before {post "/recipes/#{recipe_id}/instructions", params: valid_attributes}
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -72,7 +75,7 @@ RSpec.describe "Instructions", type: :request do
       end
 
       it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: Step can\'t be blank/)
+        expect(response.body).to match(/Validation failed: Step can't be blank/)
       end
     end
   end
